@@ -377,7 +377,7 @@ const input = [
 ".....##.....##...##.....#..#..#",
 "......#.#.....#...#....#...#...",
 "..##........#...#..............",
-"..#........#.##.........#...#..",
+"..#........#.##.........#...#..", //31 total //33 -> 2 // 32 => 1 // 31 => 0 
 "#....#....#................#..."
 ];
 
@@ -391,20 +391,71 @@ const input = [
 // if it is a tree (#) we increment a counter
 // when we get undefined because we left... the mountain we end the func
 // we say how many trees we ran into
-const treeCount = (array)=> {
-  let end = array[0].length; // 31
-  let index = 3;
- return array.reduce((count, string, idx)=> {
-   if(string[end+1]=== undefined){
-   
-   }
-  // if(string[index]=== undefined) index= 
-  if(idx !== 0){
-    if(string[index] === '#') count++;
-    index+=3;
+// const treeCount = (array, steps)=> {
+//   let end = array[0].length; // 30 is the last index, 31 char total
+//   let index = steps; // start equal to steps
+//  return array.reduce((count, string, idx)=> {
+//   // if(string[index]=== undefined) index= 
+//   if(idx !== 0){
+//     if(string[index] === '#') count++;
+//     // if(index+steps === end + (steps-1)) index = steps - 1;
+//     // else if(index+steps === end + (steps-2)) index = steps-2;
+//     // else if(index+steps === end) index = 0;
+//     if(index+steps >= end ) index = (index+steps)-end
+//     else index += steps;
+//     console.log(index);
+//   }
+//   return count
+//  }, 0)
+// }
+
+// console.log(treeCount(input, 7));
+
+const treeCountTwo = (array, steps, down)=> {
+  let end = array[0].length; // 30 is the last index, 31 char total
+  let index = steps; // start equal to steps
+  let count = 0;
+
+  for (let i = 0; i < array.length; i += down) {
+    if(i !== 0){
+      if(array[i][index] === '#') count++;
+      if(index+steps >= end ) index = (index+steps)-end
+      else index += steps;
+      // console.log(index);
+    }  
   }
   return count
- }, 0)
 }
 
-console.log(treeCount(input));
+console.log(treeCountTwo(input, 3, 1));
+
+
+// --- Part Two ---
+
+// Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.
+
+// Determine the number of trees you would encounter if, for each of the following slopes, you start at the top-left corner and traverse the map all the way to the bottom:
+
+// Right 1, down 1. // 70
+// Right 3, down 1. (This is the slope you already checked.) // 220
+// Right 5, down 1. // 63
+// Right 7, down 1. // 76
+// Right 1, down 2. // 29
+
+console.log(70 * 63 * 76 * 29 * 220)
+
+// ..##.......|..##.........##.........##.........##.........##.......  --->
+// #..O#...#..|#...#...#..#...#...#..#...#...#..#...#...#..#...#...#..
+// .#....X..#.|.#....#..#..#....#..#..#....#..#..#....#..#..#....#..#.
+// ..#.#...#O#|..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#..#.#...#.#
+// .#...##..#.|.X...##..#..#...##..#..#...##..#..#...##..#..#...##..#.
+// ..#.##.....|..#.X#.......#.##.......#.##.......#.##.......#.##.....  --->
+// .#.#.#....#|.#.#.#.O..#.#.#.#....#.#.#.#....#.#.#.#....#.#.#.#....#
+// .#........#|.#........X.#........#.#........#.#........#.#........#
+// #.##...#...|#.##...#...#.X#...#...#.##...#...#.##...#...#.##...#...
+// #...##....#|#...##....##...#X....##...##....##...##....##...##....#
+// .#..#...#.#|.#..#...#.#.#..#...X.#.#..#...#.#.#..#...#.#.#..#...#.#  --->
+
+// In the above example, these slopes would find 2, 7, 3, 4, and 2 tree(s) respectively; multiplied together, these produce the answer 336.
+
+// What do you get if you multiply together the number of trees encountered on each of the listed slopes?
